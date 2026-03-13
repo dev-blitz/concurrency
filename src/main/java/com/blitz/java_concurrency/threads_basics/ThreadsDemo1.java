@@ -22,11 +22,25 @@ public class ThreadsDemo1 {
             }
         };
 
-        Thread thread = new Thread(runnable);
+        Thread thread = new Thread(runnable, "runnable-thread"); // not compulsory but we can add a name to our thread
         thread.start();
 
         Thread custom = new CustomThread();
         custom.start();
+
+        // lambda can also be used here
+        Thread myThread = new Thread(() -> {
+            for (int i = 0; i < 5; i++) {
+                System.out.println(Thread.currentThread().getName() + ": i = " + (i + 1));
+                try {
+                    Thread.sleep(100);
+                } catch(Exception exc) {
+                    System.out.println(exc.getClass().getSimpleName() + " was triggered: " + exc.getMessage());
+                }
+            }
+        }, "my-thread");
+
+        myThread.start();
     }
 
     private static class CustomThread extends Thread {
