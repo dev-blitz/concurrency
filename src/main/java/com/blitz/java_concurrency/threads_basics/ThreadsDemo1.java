@@ -24,5 +24,22 @@ public class ThreadsDemo1 {
 
         Thread thread = new Thread(runnable);
         thread.start();
+
+        Thread custom = new CustomThread();
+        custom.start();
+    }
+
+    private static class CustomThread extends Thread {
+        @Override
+        public void run() {        
+            for (int i = 0; i < 5; i++) {
+                System.out.println("custom-i: " + (i + 1));
+                try {
+                    Thread.sleep(100);
+                } catch(Exception exp) {
+                    System.out.println(exp.getClass().getSimpleName() + " was triggered => " + exp.getMessage());
+                }
+            }
+        }
     }
 }
