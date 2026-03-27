@@ -1,0 +1,10 @@
+---------------------------------------------------------------------------------------------
+|Feature        | user-thread                | daemon-thread                                |
+|===========================================================================================|
+|JVM Shutdown   | Waits for it to finish.    | kills it immediately when user threads exit. |
+|Priority       | Default 5 (can be 1-10).   | default 5 (can be 1-10).                     |
+|Typical Use    | Main application logic.    | "Background tasks (GC, heartbeats)."         |
+---------------------------------------------------------------------------------------------
+
+Never use a daemon thread to write to a file or update a database. Because the JVM kills them instantly when the main thread ends, 
+your daemon thread might be killed right in the middle of writing, leading to corrupted data.
