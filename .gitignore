@@ -18,4 +18,4 @@ buildNumber.properties
 .*.un~
 .DS_Store
 .idea
-
+.VS*
