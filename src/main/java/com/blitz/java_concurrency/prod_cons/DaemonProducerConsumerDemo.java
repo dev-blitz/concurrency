@@ -11,7 +11,7 @@ import java.util.List;
  * 3. Stranded Threads: If a thread finishes its loop and doesn't notify, 
  * the other thread might be stuck in the 'Wait Set' forever.
  */
-public class Demo {
+public class DaemonProducerConsumerDemo {
   public static void main(String[] args) throws Exception {
     ProducerConsumer obj = new ProducerConsumer(3, 3);
     
@@ -21,15 +21,17 @@ public class Demo {
       System.out.println("memory-address of the object: " + obj.hashCode());
     }, "consumer-thread");
 
-    // REVISION: Even though consumer is a Daemon, Main is NOT.
-    // Main will wait at consumer.join() indefinitely if the consumer is stuck.
-    consumer.setDaemon(true); 
+    /*
+    * REVISION: Even though consumer is a Daemon, Main is NOT.
+    * Main will wait at consumer.join() indefinitely if the consumer is stuck.
+    * consumer.setDaemon(true);
+    */
 
-    // TRAJECTORY: Start first to allow concurrent execution.
+    /// TRAJECTORY: Start first to allow concurrent execution.
     producer.start();
     consumer.start();
 
-    // TRAJECTORY: Join second to ensure Main waits for completion.
+    /// TRAJECTORY: Join second to ensure Main waits for completion.
     producer.join(); 
     consumer.join(); 
     
