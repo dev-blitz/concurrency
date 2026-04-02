@@ -15,7 +15,7 @@ public class DaemonProducerConsumerDemo {
   public static void main(String[] args) throws Exception {
     ProducerConsumer obj = new ProducerConsumer(3, 3);
     
-    Thread producer = new Thread(new MyRunnable(obj), "producer-thread");
+    Thread producer = new Thread(new ProducerRunnable(obj), "producer-thread");
     Thread consumer = new Thread(() -> {
       obj.consume();
       System.out.println("memory-address of the object: " + obj.hashCode());
@@ -23,10 +23,11 @@ public class DaemonProducerConsumerDemo {
 
     /*
     * REVISION: Even though consumer is a Daemon, Main is NOT.
-    * Main will wait at consumer.join() indefinitely if the consumer is stuck.
-    * consumer.setDaemon(true);
+    * Main will wait at consumer.join() indefinitely if the consumer is stuck
+    * in consumer.setDaemon(true);
     */
 
+    consumer.setDaemon(true);
     /// TRAJECTORY: Start first to allow concurrent execution.
     producer.start();
     consumer.start();
@@ -43,10 +44,15 @@ public class DaemonProducerConsumerDemo {
  * REVISION: The Wrapper class that passes the shared 'obj' to the thread.
  * This ensures both threads operate on the exact same memory address.
  */
-class MyRunnable implements Runnable {
+class ProducerRunnable implements Runnable {
   ProducerConsumer obj;
-
-  public MyRunnable(ProducerConsumer obj) {
+  
+  /**
+   * constructor method to create the producer-runnable
+   * @param obj ProducerConsumer object from which the shared resource will be 
+   * triggered by method-calls
+   */
+  public ProducerRunnable(ProducerConsumer obj) {
     this.obj = obj;
   }
 
@@ -57,6 +63,11 @@ class MyRunnable implements Runnable {
   }
 }
 
+/**
+ * below class provides the class with the shared resource
+ * it also provides the methods using which we can 
+ * add or remove items from the shared resource
+ */
 class ProducerConsumer {
   private final List<Integer> container;
   private final int containerSize;
@@ -65,6 +76,13 @@ class ProducerConsumer {
   private int turnsCounter;
   private final Object LOCK; 
 
+  /**
+   * constructor method for ProducerConsumer class
+   * where we will have to provide the container-size and 
+   * no. of turns we want
+   * @param containerSize maximum container-size we need
+   * @param turnsLimit maximum number of times this iteration should go on
+   */
   public ProducerConsumer(int containerSize, int turnsLimit) {
     LOCK = new Object();
     counter = 0;
@@ -74,6 +92,9 @@ class ProducerConsumer {
     container = new ArrayList<>();
   }
 
+  /**
+   * produce method to add elemets to the shared-resource
+   */
   protected void produce() {
     synchronized(LOCK) {
       while (turnsCounter < turnsLimit) {
@@ -99,6 +120,9 @@ class ProducerConsumer {
     }
   }
 
+  /**
+   * consume method to remove elemets from the shared resource
+   */
   protected void consume() {
     synchronized(LOCK) {
       while (turnsCounter < turnsLimit) {
@@ -122,3 +146,4 @@ class ProducerConsumer {
     }
   }
 }
+
