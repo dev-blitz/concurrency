@@ -12,7 +12,10 @@ concurrency is applied when:
 1. we have a shared resource to be accessed or updated
 2. multiple threads need to co-ordinate
 
-![important concurrency tools](image.png)
+### full architechture
+
+![full-architechture](Gemini_Generated_Image_vmp3oqvmp3oqvmp3-2.png)
+
 
 ### general thread-architechture
 
@@ -37,6 +40,5 @@ concurrency is applied when:
   </tr>
 </table>
 
-### full architechture
 
-![full-architechture](Gemini_Generated_Image_vmp3oqvmp3oqvmp3-2.png)
+![important concurrency tools](image.png)
