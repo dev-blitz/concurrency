@@ -23,8 +23,8 @@ public class DaemonProducerConsumerDemo {
 
     /*
     * REVISION: Even though consumer is a Daemon, Main is NOT.
-    * Main will wait at consumer.join() indefinitely if the consumer is stuck.
-    * consumer.setDaemon(true);
+    * Main will wait at consumer.join() indefinitely if the consumer is stuck
+    * in consumer.setDaemon(true);
     */
 
     consumer.setDaemon(true);
@@ -46,7 +46,12 @@ public class DaemonProducerConsumerDemo {
  */
 class ProducerRunnable implements Runnable {
   ProducerConsumer obj;
-
+  
+  /**
+   * constructor method to create the producer-runnable
+   * @param obj ProducerConsumer object from which the shared resource will be 
+   * triggered by method-calls
+   */
   public ProducerRunnable(ProducerConsumer obj) {
     this.obj = obj;
   }
@@ -141,3 +146,4 @@ class ProducerConsumer {
     }
   }
 }
+
