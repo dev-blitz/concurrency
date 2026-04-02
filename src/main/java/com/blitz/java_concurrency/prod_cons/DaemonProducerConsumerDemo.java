@@ -13,10 +13,10 @@ import java.util.List;
  */
 public class DaemonProducerConsumerDemo {
   public static void main(String[] args) throws Exception {
-    ProducerConsumer obj = new ProducerConsumer(3, 3);
+    final ProducerConsumer obj = new ProducerConsumer(6, 6);
     
-    Thread producer = new Thread(new ProducerRunnable(obj), "producer-thread");
-    Thread consumer = new Thread(() -> {
+    final Thread producer = new Thread(new ProducerRunnable(obj), "producer-thread");
+    final Thread consumer = new Thread(() -> {
       obj.consume();
       System.out.println("memory-address of the object: " + obj.hashCode());
     }, "consumer-thread");
@@ -104,6 +104,11 @@ class ProducerConsumer {
           System.out.println("adding " + ++counter + " to the container");
           container.add(counter);
           System.out.println("produced: " + container.get(container.size() - 1));
+          try {
+            Thread.sleep(100);
+          } catch (InterruptedException exc) {
+            Thread.currentThread().interrupt();
+          }
         } else {
           System.out.println("container FULL \tpass to consumer...");
           turnsCounter += 1;
@@ -117,6 +122,7 @@ class ProducerConsumer {
       }
       // REVISION: If we add notify() here, it ensures the Consumer 
       // isn't left sleeping when the Producer finishes all turns.
+      LOCK.notify();
     }
   }
 
@@ -130,6 +136,11 @@ class ProducerConsumer {
           // NOTIFY: Wakes the Producer if it was waiting for space.
           LOCK.notify();
           System.out.println("consumed: " + container.remove(0));
+          try {
+            Thread.sleep(100);
+          } catch (InterruptedException exc) {
+            Thread.currentThread().interrupt();
+          }
         } else {
           System.out.println("container EMPTY \tpass to producer...");
           turnsCounter += 1;
