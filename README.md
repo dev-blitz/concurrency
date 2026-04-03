@@ -12,10 +12,13 @@ concurrency is applied when:
 1. we have a shared resource to be accessed or updated
 2. multiple threads need to co-ordinate
 
-### full architechture
+### jvm memory structure
 
-![full-architechture](Gemini_Generated_Image_vmp3oqvmp3oqvmp3-2.png)
+![jvm-memory-structure](./jvm-memory-structure.png)
 
+### jvm and hardware architechture
+
+![jvm-hardware-threads-architechture](./jvm-hardware-architechture.png)
 
 ### general thread-architechture
 
